@@ -1,38 +1,44 @@
 
----
 
-## 📘 Bubble Sort 
-
-### 🔍 **Concept**
-
-Bubble Sort is a simple **comparison-based** sorting algorithm. It repeatedly **swaps adjacent elements** if they are in the wrong order. This process **"bubbles"** the largest (or smallest) element to its correct position in each iteration.
-
-It’s called “bubble” sort because smaller elements slowly **"bubble up"** to the top (beginning) of the array with each pass.
+## ✅ **Bubble Sort**
 
 ---
 
-### 🔄 **Algorithm Steps**
+### 🧩 **Problem Statement**
 
-1. Traverse the array from start to end.
-2. Compare each pair of adjacent elements.
-3. Swap them if they are in the wrong order.
-4. After each pass, the largest unsorted element reaches its correct position.
-5. Repeat for all elements until the array is sorted.
-
----
-
-### 🧠 **Pseudocode**
-
-```
-for i = 0 to n-1:
-    for j = 0 to n-i-2:
-        if arr[j] > arr[j+1]:
-            swap arr[j], arr[j+1]
-```
+> **Given** an array of `n` integers, **sort the array in ascending order** using the **Bubble Sort** algorithm.
+>
+> Do not use built-in sorting functions.
+> Return or print the sorted array.
 
 ---
 
-### 💻 **C++ Code**
+### 💡 **Concept: What is Bubble Sort?**
+
+* **Bubble Sort** is a simple **comparison-based sorting algorithm**.
+* It works by **repeatedly swapping adjacent elements** if they are in the wrong order.
+* After each pass, the **largest unsorted element "bubbles" to the end** of the array.
+* The process continues until the array is sorted.
+
+---
+
+### 🔁 **Dry Run Example**
+
+Input: `arr = [5, 1, 4, 2, 8]`
+
+Let’s walk through the passes:
+
+| Pass | Comparisons        | Swaps                       | Result |
+| ---- | ------------------ | --------------------------- | ------ |
+| 1    | 5>1, 5>4, 5>2, 8>2 | \[1, 4, 2, 5, 8]            |        |
+| 2    | 1<4, 4>2, 5<8      | \[1, 2, 4, 5, 8]            |        |
+| 3    | 1<2, 2<4, 4<5      | \[1, 2, 4, 5, 8] (No swaps) |        |
+
+✅ Early termination possible when **no swaps** in a pass.
+
+---
+
+### 💻 **C++ Code: Bubble Sort**
 
 ```cpp
 #include <iostream>
@@ -40,31 +46,33 @@ using namespace std;
 
 void bubbleSort(int arr[], int n) {
     bool swapped;
-    for (int i = 0; i < n - 1; i++) {
+
+    for (int i = 0; i < n - 1; ++i) {
         swapped = false;
 
-        // Traverse the array till the unsorted part
-        for (int j = 0; j < n - i - 1; j++) {
+        // Last i elements are already in place
+        for (int j = 0; j < n - i - 1; ++j) {
             if (arr[j] > arr[j + 1]) {
+                // Swap if elements are in wrong order
                 swap(arr[j], arr[j + 1]);
                 swapped = true;
             }
         }
 
-        // If no two elements were swapped in the inner loop, break
+        // If no elements were swapped in the inner loop, the array is sorted
         if (!swapped)
             break;
     }
 }
 
 void printArray(int arr[], int n) {
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < n; ++i)
         cout << arr[i] << " ";
     cout << endl;
 }
 
 int main() {
-    int arr[] = {64, 34, 25, 12, 22, 11, 90};
+    int arr[] = {5, 1, 4, 2, 8};
     int n = sizeof(arr) / sizeof(arr[0]);
 
     cout << "Original array: ";
@@ -81,45 +89,103 @@ int main() {
 
 ---
 
-### 🧮 **Dry Run Example**
-
-**Input**: `[64, 34, 25, 12, 22, 11, 90]`
-
-#### Pass 1:
-
-* Swap 64 and 34 → `[34, 64, 25, 12, 22, 11, 90]`
-* Swap 64 and 25 → `[34, 25, 64, 12, 22, 11, 90]`
-* Swap 64 and 12 → `[34, 25, 12, 64, 22, 11, 90]`
-* ...
-* 90 moves to the end
-
-#### Pass 2:
-
-* Largest of remaining elements moves to second-last position
-
-...
-
-Continue until no swaps needed.
+### ❓ **Common Questions & Interview-Focused Insights**
 
 ---
 
-### 📊 Time and Space Complexity
+#### ✅ **Q1. What is the time complexity of Bubble Sort?**
 
-| Case       | Comparisons | Swaps | Time Complexity  |
-| ---------- | ----------- | ----- | ---------------- |
-| Best Case  | O(n)        | 0     | O(n) (optimized) |
-| Average    | O(n²)       | O(n²) | O(n²)            |
-| Worst Case | O(n²)       | O(n²) | O(n²)            |
-| Space      | -           | -     | O(1) (in-place)  |
+| Case       | Time Complexity | Explanation                              |
+| ---------- | --------------- | ---------------------------------------- |
+| Best Case  | O(n)            | When array is already sorted (optimized) |
+| Average    | O(n²)           | General unsorted input                   |
+| Worst Case | O(n²)           | Reversed array                           |
 
 ---
 
-### ✅ **Key Points**
+#### ✅ **Q2. What is the space complexity?**
 
-* **Stable** sort: Maintains relative order of equal elements.
-* **In-place**: No extra memory used.
-* **Easy to understand** and implement.
-* **Inefficient** on large datasets.
-* Optimized version stops early if array becomes sorted before all passes.
+* O(1) – Uses **no extra space** (in-place sorting).
+
+---
+
+#### ✅ **Q3. Is Bubble Sort stable?**
+
+* ✅ **Yes**
+* Equal elements retain their **relative order**.
+
+🧠 Example:
+Input: `[(3, A), (3, B)]` → After sorting: `[(3, A), (3, B)]`
+
+---
+
+#### ✅ **Q4. Is Bubble Sort adaptive?**
+
+* ✅ **Yes (if optimized)**
+* Stops early if no swaps were made in a pass → saves unnecessary iterations.
+
+---
+
+#### ✅ **Q5. When to use Bubble Sort?**
+
+Use it:
+
+* For **learning purposes**.
+* When the input array is **small** and/or **mostly sorted**.
+* For **educational environments**, not real-world applications.
+
+---
+
+#### ✅ **Q6. What if you don’t use the “swapped” optimization?**
+
+* Even if the array is sorted, it will do all `n-1` passes.
+* Time complexity in best case will be O(n²).
+
+✅ With swapped check → best case becomes O(n).
+
+---
+
+#### ✅ **Q7. Compare Bubble Sort vs Insertion Sort**
+
+| Feature        | Bubble Sort      | Insertion Sort      |
+| -------------- | ---------------- | ------------------- |
+| Time (Best)    | O(n) (optimized) | O(n)                |
+| Time (Worst)   | O(n²)            | O(n²)               |
+| Space          | O(1)             | O(1)                |
+| Stable         | ✅ Yes            | ✅ Yes               |
+| Adaptive       | ✅ (if optimized) | ✅ Yes               |
+| Real use cases | Very limited     | Used in small lists |
+
+---
+
+### 📝 **Summary Table**
+
+| Feature          | Value                        |
+| ---------------- | ---------------------------- |
+| Sorting Type     | Comparison Sort              |
+| Time Complexity  | Best: O(n), Worst: O(n²)     |
+| Space Complexity | O(1)                         |
+| In-place         | ✅ Yes                        |
+| Stable           | ✅ Yes                        |
+| Adaptive         | ✅ Yes (with optimization)    |
+| Recommended Use  | Learning/educational purpose |
+
+---
+
+### 🔍 Optional MCQ Practice (Sample)
+
+1. **Which of the following is TRUE about Bubble Sort?**
+   a) It always takes O(n²) time
+   b) It is not stable
+   c) It can be optimized for best case O(n)
+   d) It uses O(n) extra space
+   ✅ **Answer: c**
+
+2. **What is the maximum number of swaps in Bubble Sort (worst case)?**
+   a) n
+   b) n-1
+   c) n²
+   d) n(n-1)/2
+   ✅ **Answer: d**
 
 ---
