@@ -5,35 +5,38 @@
 
 ### 🧩 Problem Statement
 
-> Given an array `nums` of **even length**, where the number of **positive** and **negative** integers is **equal**, rearrange the elements such that:
+> Given an array `nums` of **even length**, where the count of **positive** and **negative** integers is **equal**, rearrange the elements such that:
 
 * Positive and negative numbers **alternate**.
-* The **first** element is **positive**.
+* The **first element** is **positive**.
 
-🧠 **Return the rearranged array**.
-**Constraints**: No extra constraints on element values; only number of positives == number of negatives.
+You must return the **rearranged array**.
 
 ---
 
 ### 💡 Concept
 
-We know:
+Given the problem constraints:
 
-* The number of positives = number of negatives.
-* The output should alternate: `pos, neg, pos, neg,...`
+* The number of positive and negative integers is equal.
+* The array length is even.
+* We must alternate signs starting with a **positive number**.
 
-🔁 Strategy:
+**Approach**:
 
-* Use a new array of size `n`.
-* Place **positives at even indices** (`0, 2, 4...`) and **negatives at odd indices** (`1, 3, 5...`).
+* Traverse the array once.
+* Use two pointers:
+
+  * `posIndex` → fill positive numbers at **even indices** (`0, 2, 4, ...`)
+  * `negIndex` → fill negative numbers at **odd indices** (`1, 3, 5, ...`)
 
 This ensures:
 
-* Alternating signs ✅
-* First element positive ✅
+* Alternating pattern ✅
+* Starting with positive number ✅
 
-📈 **Time Complexity**: O(n)
-📦 **Space Complexity**: O(n) (due to extra array)
+**Time Complexity**: `O(n)`
+**Space Complexity**: `O(n)` (due to extra result array)
 
 ---
 
@@ -41,19 +44,19 @@ This ensures:
 
 #### Input:
 
-```java
-nums = [3, -2, 1, -4]
+```cpp
+nums = [3, -1, 2, -5]
 ```
 
-#### Step-by-Step:
+#### Step-by-step Execution:
 
-* posIndex = 0, negIndex = 1
-* i = 0 → 3 → positive → arr\[0] = 3, posIndex += 2 → posIndex = 2
-* i = 1 → -2 → negative → arr\[1] = -2, negIndex += 2 → negIndex = 3
-* i = 2 → 1 → positive → arr\[2] = 1, posIndex = 4
-* i = 3 → -4 → negative → arr\[3] = -4
+* `posIndex = 0`, `negIndex = 1`
+* i = 0 → 3 > 0 → `arr[0] = 3`, `posIndex = 2`
+* i = 1 → -1 < 0 → `arr[1] = -1`, `negIndex = 3`
+* i = 2 → 2 > 0 → `arr[2] = 2`, `posIndex = 4`
+* i = 3 → -5 < 0 → `arr[3] = -5`, `negIndex = 5`
 
-✅ Output: `[3, -2, 1, -4]`
+✅ Output: `[3, -1, 2, -5]`
 
 ---
 
@@ -61,37 +64,38 @@ nums = [3, -2, 1, -4]
 
 ```
 function rearrangeArray(nums):
-    n = length of nums
-    create new array result of size n
+    n = size of nums
+    arr = new array of size n
     posIndex = 0
     negIndex = 1
 
     for i = 0 to n-1:
-        if nums[i] > 0:
-            result[posIndex] = nums[i]
+        if nums[i] >= 0:
+            arr[posIndex] = nums[i]
             posIndex += 2
         else:
-            result[negIndex] = nums[i]
+            arr[negIndex] = nums[i]
             negIndex += 2
 
-    return result
+    return arr
 ```
 
 ---
 
-### 💻 Java Code (✅ Optimized + Edge Case Comments)
+### 💻 C++ Code (Optimized with Comments)
 
-```java
-class Solution { 
-    public int[] rearrangeArray(int[] nums) {
-        int n = nums.length;
-        int[] arr = new int[n];
+```cpp
+class Solution {
+public:
+    vector<int> rearrangeArray(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> arr(n, 0); // Result array to hold rearranged elements
 
-        // posIndex for even indices, negIndex for odd indices
-        int posIndex = 0, negIndex = 1;
+        int posIndex = 0; // Even indices for positive numbers
+        int negIndex = 1; // Odd indices for negative numbers
 
         for (int i = 0; i < n; i++) {
-            if (nums[i] > 0) {
+            if (nums[i] >= 0) {
                 arr[posIndex] = nums[i];
                 posIndex += 2;
             } else {
@@ -102,15 +106,14 @@ class Solution {
 
         return arr;
     }
-}
+};
 ```
 
-#### 🔍 Edge Cases Handled:
+#### ✅ Key Points:
 
-* Equal number of positive and negative → as per constraint ✅
-* Array of size 2 → handled gracefully ✅
-* Duplicate values → allowed and supported ✅
-* All positive or all negative? ❌ Not valid per constraint
+* Edge Case: Assumes **equal number** of positives and negatives
+* Starts with positive as required
+* `>= 0` used to treat `0` as positive (adjust if needed)
 
 ---
 
@@ -118,45 +121,60 @@ class Solution {
 
 ---
 
-#### ❓ Q1: Why can't we do this in-place?
+#### ❓ Q1: What is the time complexity?
 
-Because maintaining alternating positions **without overwriting** is complex. An auxiliary array is the simplest and cleanest approach.
-
----
-
-#### ❓ Q2: What's the time and space complexity?
-
-* **Time:** O(n) (single traversal)
-* **Space:** O(n) (due to result array)
+✅ **O(n)** – Single pass through array
 
 ---
 
-#### ❓ Q3: Can we solve it in O(1) space?
+#### ❓ Q2: What is the space complexity?
 
-Yes, **in-place rearrangement** is possible using two-pointer swaps **only** when we don’t care about the original order of positives/negatives and want **alternating signs only**. But it's complex and risky to implement.
-
----
-
-#### ❓ Q4: Can the input have zero?
-
-Depends on definition:
-
-* If `0` is treated as **neither** → ignore or raise error
-* If `0` is treated as **positive** → works fine
-
-👆 In most problems, **0 is neither positive nor negative**.
+✅ **O(n)** – Uses an extra array of the same size
 
 ---
 
-#### ❓ Q5: What if positives and negatives are not equal in count?
+#### ❓ Q3: Why do we place positives at even indices?
 
-The algorithm will fail. It assumes perfect balance.
+To meet the condition:
 
-🔁 For unbalanced arrays:
+> Alternating signs starting with a **positive number** at index `0` (even)
 
-* Count positives and negatives
-* Fill alternately as much as possible
-* Add remaining at the end (complex)
+---
+
+#### ❓ Q4: Can we do it **in-place**?
+
+Only if we **don't care** about order of same-sign elements and allow extra complexity. It’s possible but **not easy or recommended** for interviews unless asked.
+
+---
+
+#### ❓ Q5: How would you handle if counts of positive and negative numbers are **not equal**?
+
+Then we need a **more general approach**:
+
+* Traverse and fill alternately until one of the types runs out
+* Then fill remaining numbers at the end
+  ✅ Not covered in this code (as it violates original constraint)
+
+---
+
+#### ❓ Q6: Is 0 considered positive?
+
+In this code: **Yes** (because of `nums[i] >= 0`)
+In real-world problems, **confirm with interviewer** or problem statement
+
+---
+
+### ✅ Summary Table
+
+| Feature                   | Value          |
+| ------------------------- | -------------- |
+| Time Complexity           | O(n)           |
+| Space Complexity          | O(n)           |
+| Starts with Positive?     | ✅ Yes          |
+| Handles Equal Count       | ✅ Yes          |
+| Handles Unequal Count     | ❌ No           |
+| Treats 0 as Positive?     | ✅ Yes (`>= 0`) |
+| Stable (preserves order)? | ✅ Yes          |
 
 ---
 
@@ -164,42 +182,29 @@ The algorithm will fail. It assumes perfect balance.
 
 ---
 
-**Q1. What is the time complexity of this solution?**
+**Q1. What does the algorithm assume about the input?**
 
-* a) O(log n)
-* ✅ b) O(n)
-* c) O(n²)
-* d) O(1)
-
----
-
-**Q2. What condition must the input array satisfy?**
-
-* ✅ a) Equal positive and negative count
-* b) Sorted input
-* c) No duplicates
-* d) All positive numbers
+* a) All elements are positive
+* ✅ b) Equal positive and negative numbers
+* c) Array is sorted
+* d) Input length is odd
 
 ---
 
-**Q3. Where are positive numbers placed in the output?**
+**Q2. Which index do positive numbers go to in the rearranged array?**
 
 * a) Odd indices
 * ✅ b) Even indices
-* c) At the end
-* d) Randomly
+* c) End of the array
+* d) None of the above
 
 ---
 
-### ✅ Summary Table
+**Q3. What would happen if the input had more positives than negatives?**
 
-| Feature                   | Value                                |
-| ------------------------- | ------------------------------------ |
-| Goal                      | Alternate signs, start with positive |
-| Time Complexity           | O(n)                                 |
-| Space Complexity          | O(n)                                 |
-| In-place                  | ❌ (uses extra array)                 |
-| Works when sign counts ≠? | ❌ No                                 |
-| Handles zero              | ⚠️ Only if specified                 |
+* a) Code runs fine
+* b) Code crashes
+* ✅ c) Index out of bounds
+* d) Output will be incorrect but no crash
 
 ---
